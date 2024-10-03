@@ -5,8 +5,9 @@ const Exolune = require('../models/Exolune.js');
 
 /* GET exolunes page. */
 router.get('/', (req, res) => {
-    console.log("Je passe par la route /exolunes");
+    console.log("Je passe par la route /exolunes ahahaha");
     res.render('exolunes/index.hbs', { exolunesList: Exolune.list() });
 });
+ 
 
 module.exports = router;
