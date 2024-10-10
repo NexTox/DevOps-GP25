@@ -11,7 +11,7 @@ const validator = require('validator');
 router.get('/', (req, res, next) => {
     console.log("USERS INDEX");
     if (req.session.login) {
-        res.redirect("/members");
+        InteriorIfLogin(res);
     }
     res.render('users/index');
 });
@@ -74,6 +74,10 @@ router.post('/add', (req, res, next) => {
 });
 
 module.exports = router;
+
+function InteriorIfLogin(res) {
+    res.redirect("/members");
+}
 
 function ManageIfUserFound(userFound, req, res) {
     if (userFound.active == false) {
