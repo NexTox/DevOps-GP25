@@ -47,8 +47,7 @@ router.get('/search', function (req, res, next) {
     let min3charOK = false;
     let exoplanetsTable = null;
     if (uniqueNameExoplanetParam.length >= 3) {
-        min3charOK = true;
-        exoplanetsTable = Exoplanet.search(uniqueNameExoplanetParam);
+        ({ min3charOK, exoplanetsTable } = SearchExoIfLenghtIsSuperiorAt3OrEgal(min3charOK, exoplanetsTable, uniqueNameExoplanetParam));
     }
     res.render('exoplanets/index.hbs', { exoplanetsTable, min3charOK });
 });
@@ -77,16 +76,14 @@ router.get('/filter', function (req, res, next) {
     const filter = req.query.filter;
     let exoplanetsTableFilter = [];
     if (filter === "Filtrer par hclass") {
-        console.log("GET FILTER EXOPLANET HCLASS");
-        exoplanetsTableFilter = Exoplanet.searchByHclass(req.query.hClassExoplanet);
+        FilterByHClass();
     }
     if (filter === "Filtrer par année") {
-        console.log("GET FILTER EXOPLANET ANNEE");
-        const discoveryYearParam = parseInt(req.query.discoveryYearExoplanet);
-        exoplanetsTableFilter = Exoplanet.searchByYear(discoveryYearParam);
+        exoplanetsTableFilter = FilterByYear(req, exoplanetsTableFilter);
     }
     // param exoplanetsTable must be the same but with a different value (table filtering)
     res.render('exoplanets/index.hbs', { exoplanetsTable: exoplanetsTableFilter });
+
 });
 
 
@@ -116,6 +113,25 @@ router.post('/update', function (req, res, next) {
 
 
 module.exports = router;
+
+function FilterByHClass() {
+    console.log("GET FILTER EXOPLANET HCLASS");
+    exoplanetsTableFilter = Exoplanet.searchByHclass(req.query.hClassExoplanet);
+}
+
+function FilterByYear(req, exoplanetsTableFilter) {
+    console.log("GET FILTER EXOPLANET ANNEE");
+    const discoveryYearParam = parseInt(req.query.discoveryYearExoplanet);
+    exoplanetsTableFilter = Exoplanet.searchByYear(discoveryYearParam);
+    return exoplanetsTableFilter;
+}
+
+function SearchExoIfLenghtIsSuperiorAt3OrEgal(min3charOK, exoplanetsTable, uniqueNameExoplanetParam) {
+    min3charOK = true;
+    exoplanetsTable = Exoplanet.search(uniqueNameExoplanetParam);
+    return { min3charOK, exoplanetsTable };
+}
+
 function AddExoplaneteIfLenghtIsOk(req, res) {
     console.log("req.file : " + JSON.stringify(req.file));
     let filename = null;
