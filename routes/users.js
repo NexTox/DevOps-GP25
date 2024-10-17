@@ -11,6 +11,7 @@ const validator = require('validator');
 router.get('/', (req, res, next) => {
     //aaaaaaaaaaa
     //aaaa
+    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     console.log("USERS INDEX");
     if (req.session.login) {
         InteriorIfLogin(res);
